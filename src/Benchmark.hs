@@ -1,7 +1,7 @@
 
 
 module Benchmark
-    (
+    ( patternMatch
     ) where
 
 import qualified Data.Char as C

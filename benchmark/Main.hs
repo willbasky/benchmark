@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Benchmark (projectName)
+import Benchmark (patternMatch)
 
 
 main :: IO ()
