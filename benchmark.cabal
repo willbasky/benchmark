@@ -63,6 +63,9 @@ library
   import:              common-options
   hs-source-dirs:      src
   exposed-modules:     Benchmark
+  build-depends:       text
+                     , containers
+                     , attoparsec
 
 test-suite benchmark-test
   import:              common-options
@@ -80,6 +83,7 @@ benchmark benchmark-benchmark
   hs-source-dirs:      benchmark
   main-is:             Main.hs
   build-depends:       benchmark
+
   ghc-options:         -threaded
                        -rtsopts
                        -with-rtsopts=-N
