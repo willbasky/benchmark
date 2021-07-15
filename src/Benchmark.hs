@@ -30,8 +30,12 @@ validCahrs = (['a'..'z'] ++ ['A'..'Z'] ++ ['0','1','2','3','4','5','6','7','8','
 
 
 -- Attoparsec
+
+runParser :: Parser a -> Text -> Either String a
+runParser p t = parseOnly (p <* endOfInput) t
+
 patternMatchAtto:: Text -> Bool
-patternMatchAtto txt = case parseOnly (textParser <* endOfInput) txt of
+patternMatchAtto txt = case runParser textParser txt of
   Left _ -> False
   Right _ -> True
 
@@ -56,6 +60,6 @@ letterU = satisfy isLetter
   where isLetter c = c >= 'A' && c <= 'Z'
 
 special :: Parser Char
-special = satisfy special
-  where special c = c == '-' || c == '_'
+special = satisfy special'
+  where special' c = c == '-' || c == '_'
 
