@@ -77,6 +77,10 @@ test-suite benchmark-test
   main-is:             Spec.hs
   build-depends:       benchmark
                      , hspec
+                     , hedgehog
+                     , hspec-hedgehog
+                     , text
+
 
 benchmark benchmark-benchmark
   import:              common-options
@@ -84,6 +88,8 @@ benchmark benchmark-benchmark
   hs-source-dirs:      benchmark
   main-is:             Main.hs
   build-depends:       benchmark
+                     , text
+                     , criterion
 
   ghc-options:         -threaded
                        -rtsopts
