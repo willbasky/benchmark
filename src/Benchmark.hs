@@ -3,6 +3,7 @@
 module Benchmark
     ( patternMatch
     , patternMatchOptimized
+    , patternMatchOptimized2
     , patternMatchAtto
     ) where
 
@@ -30,7 +31,7 @@ validCahrs = (['a'..'z'] ++ ['A'..'Z'] ++ ['0','1','2','3','4','5','6','7','8','
 
 
 -- Text optimized approach
-
+-- it consumes unicode chars.
 patternMatchOptimized :: Text -> Bool
 patternMatchOptimized txt =
   C.isAlphaNum (T.unpack txt !! 0) && (alphaNumSpecial txt)
@@ -40,6 +41,17 @@ alphaNumSpecial txt = all (\c -> isSpecial c || C.isAlphaNum c)  (Set.fromList $
 
 isSpecial :: Char -> Bool
 isSpecial a = a == '-' || a == '_'
+
+-- Text optimized approach 2
+
+patternMatchOptimized2 :: Text -> Bool
+patternMatchOptimized2 orderId = isAlphaNumOpt2 (T.unpack orderId !! 0) && (alphaNumSpecial2 orderId)
+
+alphaNumSpecial2 :: Text -> Bool
+alphaNumSpecial2 orderId = all (\c -> isSpecial c || isAlphaNumOpt2 c) (Set.fromList $ T.unpack orderId)
+
+isAlphaNumOpt2 :: Char -> Bool
+isAlphaNumOpt2 a = (C.ord a >= 97 && C.ord a <=122) || (C.ord a >= 65 && C.ord a <= 90) || C.isDigit a
 
 -- Attoparsec approach
 
@@ -61,17 +73,7 @@ alphaNumAndSpecial :: Parser Char
 alphaNumAndSpecial = try alphaNum <|> try special
 
 alphaNum :: Parser Char
-alphaNum = satisfy C.isAlphaNum
+alphaNum = satisfy $ inClass "a-zA-Z0-9"
 
 special :: Parser Char
-special = satisfy special'
-  where special' c = c == '-' || c == '_'
-
--- letterL :: Parser Char
--- letterL = satisfy isLetter
---   where isLetter c = c >= 'a' && c <= 'z'
-
--- letterU :: Parser Char
--- letterU = satisfy isLetter
---   where isLetter c = c >= 'A' && c <= 'Z'
-
+special = satisfy $ inClass "-_"
