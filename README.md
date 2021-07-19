@@ -11,67 +11,88 @@ Comapre three approaches to validate text input.
 ```
 Benchmark benchmark-benchmark: RUNNING...
 benchmarking patternMatch 10
-time                 82.16 μs   (80.36 μs .. 85.93 μs)
-                     0.985 R²   (0.973 R² .. 0.994 R²)
-mean                 88.52 μs   (84.36 μs .. 104.7 μs)
-std dev              26.39 μs   (9.076 μs .. 53.19 μs)
-variance introduced by outliers: 98% (severely inflated)
+time                 83.77 μs   (82.87 μs .. 84.75 μs)
+                     0.998 R²   (0.996 R² .. 0.999 R²)
+mean                 86.22 μs   (84.79 μs .. 89.56 μs)
+std dev              7.235 μs   (3.522 μs .. 12.05 μs)
+variance introduced by outliers: 76% (severely inflated)
 
 benchmarking patternMatchOptimized 10
-time                 2.093 μs   (1.965 μs .. 2.197 μs)
-                     0.982 R²   (0.974 R² .. 0.994 R²)
-mean                 2.008 μs   (1.950 μs .. 2.090 μs)
-std dev              246.4 ns   (178.8 ns .. 324.4 ns)
+time                 1.972 μs   (1.903 μs .. 2.077 μs)
+                     0.984 R²   (0.971 R² .. 0.995 R²)
+mean                 2.025 μs   (1.970 μs .. 2.129 μs)
+std dev              250.9 ns   (162.7 ns .. 372.0 ns)
 variance introduced by outliers: 92% (severely inflated)
 
+benchmarking patternMatchOptimized2 10
+time                 3.137 μs   (2.929 μs .. 3.269 μs)
+                     0.986 R²   (0.981 R² .. 0.991 R²)
+mean                 2.859 μs   (2.779 μs .. 2.966 μs)
+std dev              286.5 ns   (214.2 ns .. 384.5 ns)
+variance introduced by outliers: 88% (severely inflated)
+
 benchmarking patternMatchAtto 10
-time                 2.666 μs   (2.531 μs .. 2.848 μs)
-                     0.974 R²   (0.945 R² .. 0.993 R²)
-mean                 2.663 μs   (2.526 μs .. 3.002 μs)
-std dev              722.1 ns   (418.0 ns .. 1.131 μs)
-variance introduced by outliers: 98% (severely inflated)
-
-benchmarking patternMatch 50
-time                 302.0 μs   (284.7 μs .. 318.7 μs)
-                     0.983 R²   (0.976 R² .. 0.990 R²)
-mean                 288.5 μs   (275.7 μs .. 299.7 μs)
-std dev              34.07 μs   (27.25 μs .. 41.70 μs)
-variance introduced by outliers: 83% (severely inflated)
-
-benchmarking patternMatchOptimized 50
-time                 8.979 μs   (8.761 μs .. 9.211 μs)
-                     0.989 R²   (0.983 R² .. 0.995 R²)
-mean                 9.434 μs   (9.112 μs .. 10.44 μs)
-std dev              1.931 μs   (868.9 ns .. 3.719 μs)
-variance introduced by outliers: 97% (severely inflated)
-
-benchmarking patternMatchAtto 50
-time                 11.01 μs   (10.53 μs .. 11.54 μs)
-                     0.982 R²   (0.974 R² .. 0.990 R²)
-mean                 10.81 μs   (10.44 μs .. 11.23 μs)
-std dev              1.245 μs   (930.9 ns .. 1.506 μs)
+time                 2.348 μs   (2.268 μs .. 2.422 μs)
+                     0.987 R²   (0.971 R² .. 0.994 R²)
+mean                 2.301 μs   (2.245 μs .. 2.406 μs)
+std dev              250.8 ns   (146.7 ns .. 413.0 ns)
 variance introduced by outliers: 90% (severely inflated)
 
-benchmarking patternMatch 100
-time                 271.6 μs   (255.4 μs .. 293.2 μs)
-                     0.967 R²   (0.951 R² .. 0.985 R²)
-mean                 290.1 μs   (276.1 μs .. 313.9 μs)
-std dev              64.22 μs   (36.82 μs .. 98.32 μs)
-variance introduced by outliers: 96% (severely inflated)
+benchmarking patternMatch 50
+time                 268.1 μs   (255.5 μs .. 289.3 μs)
+                     0.966 R²   (0.942 R² .. 0.988 R²)
+mean                 285.7 μs   (273.6 μs .. 325.3 μs)
+std dev              72.60 μs   (42.65 μs .. 130.7 μs)
+variance introduced by outliers: 97% (severely inflated)
 
-benchmarking patternMatchAtto 100
-time                 22.03 μs   (19.96 μs .. 23.96 μs)
-                     0.950 R²   (0.906 R² .. 0.984 R²)
-mean                 21.63 μs   (20.17 μs .. 23.74 μs)
-std dev              5.908 μs   (2.149 μs .. 9.584 μs)
-variance introduced by outliers: 98% (severely inflated)
+benchmarking patternMatchOptimized 50
+time                 8.823 μs   (8.677 μs .. 9.058 μs)
+                     0.989 R²   (0.977 R² .. 0.998 R²)
+mean                 8.794 μs   (8.537 μs .. 9.271 μs)
+std dev              1.125 μs   (695.2 ns .. 1.719 μs)
+variance introduced by outliers: 91% (severely inflated)
+
+benchmarking patternMatchOptimized2 50
+time                 11.09 μs   (10.71 μs .. 11.66 μs)
+                     0.976 R²   (0.948 R² .. 0.997 R²)
+mean                 11.54 μs   (11.16 μs .. 12.32 μs)
+std dev              1.705 μs   (796.6 ns .. 3.158 μs)
+variance introduced by outliers: 93% (severely inflated)
+
+benchmarking patternMatchAtto 50
+time                 9.705 μs   (9.398 μs .. 10.19 μs)
+                     0.983 R²   (0.970 R² .. 0.997 R²)
+mean                 10.21 μs   (9.792 μs .. 11.26 μs)
+std dev              2.200 μs   (1.056 μs .. 4.088 μs)
+variance introduced by outliers: 97% (severely inflated)
+
+benchmarking patternMatch 100
+time                 272.2 μs   (261.4 μs .. 290.3 μs)
+                     0.981 R²   (0.964 R² .. 0.997 R²)
+mean                 335.5 μs   (278.1 μs .. 504.2 μs)
+std dev              364.9 μs   (30.57 μs .. 702.9 μs)
+variance introduced by outliers: 99% (severely inflated)
 
 benchmarking patternMatchOptimized 100
-time                 14.54 μs   (14.26 μs .. 15.03 μs)
-                     0.994 R²   (0.990 R² .. 0.997 R²)
-mean                 15.44 μs   (15.16 μs .. 15.82 μs)
-std dev              1.131 μs   (883.1 ns .. 1.382 μs)
-variance introduced by outliers: 76% (severely inflated)
+time                 14.51 μs   (14.10 μs .. 14.93 μs)
+                     0.991 R²   (0.983 R² .. 0.996 R²)
+mean                 14.81 μs   (14.01 μs .. 17.88 μs)
+std dev              4.815 μs   (1.303 μs .. 9.921 μs)
+variance introduced by outliers: 99% (severely inflated)
+
+benchmarking patternMatchOptimized2 100
+time                 18.08 μs   (16.64 μs .. 19.46 μs)
+                     0.970 R²   (0.962 R² .. 0.988 R²)
+mean                 17.78 μs   (17.17 μs .. 18.58 μs)
+std dev              2.114 μs   (1.606 μs .. 3.063 μs)
+variance introduced by outliers: 90% (severely inflated)
+
+benchmarking patternMatchAtto 100
+time                 18.32 μs   (18.03 μs .. 18.64 μs)
+                     0.990 R²   (0.971 R² .. 0.998 R²)
+mean                 21.01 μs   (19.72 μs .. 25.05 μs)
+std dev              7.891 μs   (4.757 μs .. 13.94 μs)
+variance introduced by outliers: 99% (severely inflated)
 
 Benchmark benchmark-benchmark: FINISH
 ```

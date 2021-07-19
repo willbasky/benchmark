@@ -8,7 +8,7 @@ description:
 homepage:            https://github.com/metaxis/benchmark
 bug-reports:         https://github.com/metaxis/benchmark/issues
 license:             Apache-2.0
-license-file:        LICENSE
+license-file:        UNLICENSE
 author:              metaxis
 maintainer:          metaxis <email>
 copyright:           2021 metaxis

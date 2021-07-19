@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Benchmark (patternMatch, patternMatchAtto, patternMatchOptimized)
+import Benchmark (patternMatch, patternMatchAtto, patternMatchOptimized, patternMatchOptimized2)
 import Data.Text (Text)
 import Criterion
 import Criterion.Main (defaultMain)
@@ -8,19 +8,21 @@ import Criterion.Main (defaultMain)
 main :: IO ()
 main = crit
 
-
 crit :: IO ()
 crit = do
   defaultMain
       [ bench "patternMatch 10" $ nf patternMatch text10
       , bench "patternMatchOptimized 10" $ nf patternMatchOptimized text10
+      , bench "patternMatchOptimized2 10" $ nf patternMatchOptimized2 text10
       , bench "patternMatchAtto 10" $ nf patternMatchAtto text10
       , bench "patternMatch 50" $ nf patternMatch text50
       , bench "patternMatchOptimized 50" $ nf patternMatchOptimized text50
+      , bench "patternMatchOptimized2 50" $ nf patternMatchOptimized2 text50
       , bench "patternMatchAtto 50" $ nf patternMatchAtto text50
       , bench "patternMatch 100" $ nf patternMatch text100
-      , bench "patternMatchAtto 100" $ nf patternMatchAtto text100
       , bench "patternMatchOptimized 100" $ nf patternMatchOptimized text100
+      , bench "patternMatchOptimized2 100" $ nf patternMatchOptimized2 text100
+      , bench "patternMatchAtto 100" $ nf patternMatchAtto text100
       ]
 
 text10 :: Text
