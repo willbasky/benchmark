@@ -91,7 +91,7 @@ special = satisfy $ inClass "-_"
 -- /^[a-z0-9_-]+$/i
 
 regexForInputPcre :: Pcre.Regex
-regexForInputPcre = Pcre.regex [Pcre.CaseInsensitive] "^[a-z0-9]+[a-z0-9_-]+$"
+regexForInputPcre = Pcre.regex [Pcre.CaseInsensitive] "^[a-z0-9][a-z0-9_-]+$"
 
 validateInputRegexPcre :: Text -> Bool
 validateInputRegexPcre input = isJust $ Pcre.find regexForInputPcre input
@@ -106,7 +106,7 @@ regexForInputPosix =
   Posix.makeRegexOpts
     (Posix.compIgnoreCase .|. Posix.compExtended)
     Posix.defaultExecOpt
-    ("^[a-z0-9]+[a-z0-9_-]+$" :: String)
+    ("^[a-z0-9][a-z0-9_-]+$" :: String)
 
 validateInputRegexPosix :: String -> Bool
 validateInputRegexPosix = Posix.matchTest regexForInputPosix

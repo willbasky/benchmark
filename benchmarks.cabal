@@ -85,7 +85,6 @@ test-suite validate_input_test
                      , hspec
                      , hedgehog
                      , hspec-hedgehog
-                     , text
 
 
 benchmark validate_input_bench
