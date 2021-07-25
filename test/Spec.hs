@@ -1,14 +1,14 @@
 
 module Main (main) where
 
-import ValidateInput (validateInput, validateInputOptimized, validateInputAtto, validateInputOptimized2)
 import Data.Text (Text)
 import Hedgehog (Gen, PropertyT, forAll, (===))
-import Hedgehog.Gen (alphaNum, choice, frequency, sample, text, element)
+import Hedgehog.Gen (alphaNum, choice, element, frequency, sample, text)
 import qualified Hedgehog.Gen as G
 import Hedgehog.Range (constant)
 import Test.Hspec (Spec, describe, hspec, it, shouldBe)
 import Test.Hspec.Hedgehog (hedgehog)
+import ValidateInput (validateInput, validateInputAtto, validateInputOptimized2, validateInputRegex)
 
 
 main :: IO ()
@@ -21,7 +21,7 @@ main = hspec $ do
 
 validateInputShould :: Spec
 validateInputShould =
-  describe "validateInput Text" $ do
+  describe "Elem Text" $ do
     it "Success with Test 1" $ validateInput "9002876543___1234" `shouldBe` True
     it "Success with Test 2" $ validateInput "AAb9002876-543___1234" `shouldBe` True
     it "Success with Test 3" $ validateInput "@-AAb9002876-543___1234" `shouldBe` False
@@ -95,7 +95,7 @@ validateInputShould =
 
 validateInputOptimizedShould2 :: Spec
 validateInputOptimizedShould2 =
-  describe "validateInput optimized Text" $ do
+  describe "Optimized Text" $ do
     it "Success with Test 1" $ validateInputOptimized2 "9002876543___1234" `shouldBe` True
     it "Success with Test 2" $ validateInputOptimized2 "AAb9002876-543___1234" `shouldBe` True
     it "Success with Test 3" $ validateInputOptimized2 "@-AAb9002876-543___1234" `shouldBe` False
@@ -132,7 +132,7 @@ validateInputOptimizedShould2 =
 
 validateInputAttoShould :: Spec
 validateInputAttoShould =
-  describe "validateInputAtto Atto" $ do
+  describe "Attoparsec" $ do
     it "Success with Test 1" $ validateInputAtto "9002876543___1234" `shouldBe` True
     it "Success with Test 2" $ validateInputAtto "AAb9002876-543___1234" `shouldBe` True
     it "Success with Test 3" $ validateInputAtto "@-AAb9002876-543___1234" `shouldBe` False
@@ -166,6 +166,43 @@ validateInputAttoShould =
     it "Success with Test 31" $ validateInputAtto "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
     it "Success with Test 32" $ validateInputAtto "awerЫаырмuy" `shouldBe` False
     it "Success with Test 33" $ validateInputAtto "aweruy_Ελληνική" `shouldBe` False
+
+validateInputRegexShould :: Spec
+validateInputRegexShould =
+  describe "Regex" $ do
+    it "Success with Test 1" $ validateInputRegex "9002876543___1234" `shouldBe` True
+    it "Success with Test 2" $ validateInputRegex "AAb9002876-543___1234" `shouldBe` True
+    it "Success with Test 3" $ validateInputRegex "@-AAb9002876-543___1234" `shouldBe` False
+    it "Success with Test 4" $ validateInputRegex "---AAb9002+876-543___1234" `shouldBe` False
+    it "Success with Test 5" $ validateInputRegex "AAb9002+876-543___1234" `shouldBe` False
+    it "Success with Test 6" $ validateInputRegex "AAb900-OPadff2876-543___1234" `shouldBe` True
+    it "Success with Test 7" $ validateInputRegex "AAb900-OPadff2876-543___1234-----_______" `shouldBe` True
+    it "Success with Test 8" $ validateInputRegex "AAb900-OPadff2876-543___1234-----_______*" `shouldBe` False
+    it "Success with Test 9" $ validateInputRegex "900-O_Pad-_ff2-876-543___1234-----______JAULOqw" `shouldBe` True
+    it "Success with Test 10" $ validateInputRegex "AAb-90111&80-O_Pad-_ff2-876-543___1234-----______JAUL;/\\'Oqw" `shouldBe` False
+    it "Success with Test 11" $ validateInputRegex "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'Oqw" `shouldBe` False
+    it "Success with Test 12" $ validateInputRegex "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'\\Oqw" `shouldBe` False
+    it "Success with Test 13" $ validateInputRegex "AASDFGHJERTYUCFGHJTYU" `shouldBe` True
+    it "Success with Test 14" $ validateInputRegex "12345678098765434567" `shouldBe` True
+    it "Success with Test 15" $ validateInputRegex "awertyuijhgfdertyuioiuy" `shouldBe` True
+    it "Success with Test 16" $ validateInputRegex "---------------------------------------" `shouldBe` False
+    it "Success with Test 17" $ validateInputRegex "MOJOTestUPIPJ13'''(select*from(select(sleep(20)))a)'''MOJOTestUPIPJ13}}yl7z7'''/<juaa1;console.log(299792458}}]],(299792458);" `shouldBe` False
+    it "Success with Test 18" $ validateInputRegex "++**&@#E#(#*&@#&*(*&@&*!" `shouldBe` False
+    it "Success with Test 19" $ validateInputRegex "1F ÝÞ1Fáãæç§© ¬         F1F1F1F1F1F1        " `shouldBe` False
+    it "Success with Test 20" $ validateInputRegex "11    AADYEJI       aasd        dfgh" `shouldBe` False
+    it "Success with Test 21" $ validateInputRegex "11\t\t\t\t\t\t\t" `shouldBe` False
+    it "Success with Test 22" $ validateInputRegex "asdfghΛλCyrillicЛ." `shouldBe` False
+    it "Success with Test 23" $ validateInputRegex "asdλfgh" `shouldBe` False
+    it "Success with Test 24" $ validateInputRegex "asd.fgh" `shouldBe` False
+    it "Success with Test 25" $ validateInputRegex "1asdAZ00010100101-_123fgh1" `shouldBe` True
+    it "Success with Test 26" $ validateInputRegex "1asdAZ0001α0100101-_123fgh1" `shouldBe` False
+    it "Success with Test 27" $ validateInputRegex "1asdAZβ" `shouldBe` False
+    it "Success with Test 28" $ validateInputRegex "1asdAZγ" `shouldBe` False
+    it "Success with Test 29" $ validateInputRegex "1asδϵζdAZ" `shouldBe` False
+    it "Success with Test 30" $ validateInputRegex "1asμνdAZ" `shouldBe` False
+    it "Success with Test 31" $ validateInputRegex "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
+    it "Success with Test 32" $ validateInputRegex "awerЫаырмuy" `shouldBe` False
+    it "Success with Test 33" $ validateInputRegex "aweruy_Ελληνική" `shouldBe` False
 
 compareThem :: Spec
 compareThem = do

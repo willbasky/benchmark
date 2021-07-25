@@ -69,6 +69,7 @@ library
                      , attoparsec
                      , generic-arbitrary
                      , QuickCheck
+                     , text-icu
 
 test-suite validate_input_test
   import:              common-options

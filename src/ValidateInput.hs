@@ -2,17 +2,20 @@
 
 module ValidateInput
     ( validateInput
-    , validateInputOptimized
+    -- , validateInputOptimized
     , validateInputOptimized2
     , validateInputAtto
+    , validateInputRegex
     ) where
 
+import Control.Applicative
+import Data.Attoparsec.Text
 import qualified Data.Char as C
+import Data.Maybe (isJust)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as T
-import Data.Attoparsec.Text
-import Control.Applicative
+import Data.Text.ICU
 
 
 -- Text approach
@@ -31,7 +34,7 @@ validCahrs = (['a'..'z'] ++ ['A'..'Z'] ++ ['0','1','2','3','4','5','6','7','8','
 
 
 -- Text optimized approach
--- it consumes unicode chars.
+-- it consumes unicode chars, hence it is wrong
 validateInputOptimized :: Text -> Bool
 validateInputOptimized txt =
   C.isAlphaNum (T.unpack txt !! 0) && (alphaNumSpecial txt)
@@ -60,7 +63,7 @@ runParser p t = parseOnly (p <* endOfInput) t
 
 validateInputAtto:: Text -> Bool
 validateInputAtto txt = case runParser textParser txt of
-  Left _ -> False
+  Left _  -> False
   Right _ -> True
 
 textParser :: Parser Text
@@ -77,3 +80,15 @@ alphaNum = satisfy $ inClass "a-zA-Z0-9"
 
 special :: Parser Char
 special = satisfy $ inClass "-_"
+
+-- Regex. Imperative approach
+
+-- ^[a-z0-9]+[a-z0-9_-]+$
+-- /^[a-z0-9_-]+$/i
+
+
+regexForInput :: Regex
+regexForInput = regex [CaseInsensitive] "^[a-z0-9]+[a-z0-9_-]+$"
+
+validateInputRegex :: Text -> Bool
+validateInputRegex input = isJust $ find regexForInput input
