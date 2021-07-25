@@ -93,7 +93,6 @@ benchmark validate_input_bench
   hs-source-dirs:      benchmark/ValidateInput
   main-is:             Main.hs
   build-depends:       benchmarks
-                     , text
                      , criterion
 
   ghc-options:         -threaded
@@ -106,7 +105,6 @@ benchmark pack_overhead_bench
   hs-source-dirs:      benchmark/PackOverhead
   main-is:             Main.hs
   build-depends:       benchmarks
-                     , text
                      , criterion
 
   ghc-options:         -threaded
