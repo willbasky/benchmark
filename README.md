@@ -1,4 +1,4 @@
-# benchmark
+# benchmarks
 
 Comapre three approaches to validate text input.
 
@@ -6,7 +6,7 @@ Comapre three approaches to validate text input.
 2. `patternMatchAtto` usual Attoparsec parser
 3. `patternMatchOptimized` refactored first approach
 
-## Benchmarks
+## Benchmarks output
 
 ```
 Benchmark benchmark-benchmark: RUNNING...
