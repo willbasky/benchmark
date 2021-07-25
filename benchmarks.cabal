@@ -62,12 +62,15 @@ common common-options
 library
   import:              common-options
   hs-source-dirs:      src
-  exposed-modules:     Benchmarks
+  exposed-modules:     ValidateInput
+                     , PackOverhead
   build-depends:       text
                      , containers
                      , attoparsec
+                     , generic-arbitrary
+                     , QuickCheck
 
-test-suite benchmarks-test
+test-suite validate_input_test
   import:              common-options
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
@@ -82,10 +85,23 @@ test-suite benchmarks-test
                      , text
 
 
-benchmark benchmarks-benchmark
+benchmark validate_input_bench
   import:              common-options
   type:                exitcode-stdio-1.0
-  hs-source-dirs:      benchmark
+  hs-source-dirs:      benchmark/ValidateInput
+  main-is:             Main.hs
+  build-depends:       benchmarks
+                     , text
+                     , criterion
+
+  ghc-options:         -threaded
+                       -rtsopts
+                       -with-rtsopts=-N
+
+benchmark pack_overhead_bench
+  import:              common-options
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      benchmark/PackOverhead
   main-is:             Main.hs
   build-depends:       benchmarks
                      , text

@@ -1,10 +1,10 @@
 
 
-module Benchmarks
-    ( patternMatch
-    , patternMatchOptimized
-    , patternMatchOptimized2
-    , patternMatchAtto
+module ValidateInput
+    ( validateInput
+    , validateInputOptimized
+    , validateInputOptimized2
+    , validateInputAtto
     ) where
 
 import qualified Data.Char as C
@@ -16,8 +16,8 @@ import Control.Applicative
 
 
 -- Text approach
-patternMatch :: Text -> Bool
-patternMatch txt =
+validateInput :: Text -> Bool
+validateInput txt =
   ((T.unpack txt !! 0) `elem` validCahrs) && not (containSpecialChars txt)
 
 containSpecialChars :: Text -> Bool
@@ -32,8 +32,8 @@ validCahrs = (['a'..'z'] ++ ['A'..'Z'] ++ ['0','1','2','3','4','5','6','7','8','
 
 -- Text optimized approach
 -- it consumes unicode chars.
-patternMatchOptimized :: Text -> Bool
-patternMatchOptimized txt =
+validateInputOptimized :: Text -> Bool
+validateInputOptimized txt =
   C.isAlphaNum (T.unpack txt !! 0) && (alphaNumSpecial txt)
 
 alphaNumSpecial :: Text -> Bool
@@ -44,8 +44,8 @@ isSpecial a = a == '-' || a == '_'
 
 -- Text optimized approach 2
 
-patternMatchOptimized2 :: Text -> Bool
-patternMatchOptimized2 orderId = isAlphaNumOpt2 (T.unpack orderId !! 0) && (alphaNumSpecial2 orderId)
+validateInputOptimized2 :: Text -> Bool
+validateInputOptimized2 orderId = isAlphaNumOpt2 (T.unpack orderId !! 0) && (alphaNumSpecial2 orderId)
 
 alphaNumSpecial2 :: Text -> Bool
 alphaNumSpecial2 orderId = all (\c -> isSpecial c || isAlphaNumOpt2 c) (Set.fromList $ T.unpack orderId)
@@ -58,8 +58,8 @@ isAlphaNumOpt2 a = (C.ord a >= 97 && C.ord a <=122) || (C.ord a >= 65 && C.ord a
 runParser :: Parser a -> Text -> Either String a
 runParser p t = parseOnly (p <* endOfInput) t
 
-patternMatchAtto:: Text -> Bool
-patternMatchAtto txt = case runParser textParser txt of
+validateInputAtto:: Text -> Bool
+validateInputAtto txt = case runParser textParser txt of
   Left _ -> False
   Right _ -> True
 
