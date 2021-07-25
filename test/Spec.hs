@@ -1,7 +1,7 @@
 
 module Main (main) where
 
-import Benchmarks (patternMatch, patternMatchOptimized, patternMatchAtto)
+import Benchmarks (patternMatch, patternMatchOptimized, patternMatchAtto, patternMatchOptimized2)
 import Data.Text (Text)
 import Hedgehog (Gen, PropertyT, forAll, (===))
 import Hedgehog.Gen (alphaNum, choice, frequency, sample, text, element)

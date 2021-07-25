@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Benchmarks (patternMatch, patternMatchAtto, patternMatchOptimized)
+import Benchmarks (patternMatch, patternMatchAtto, patternMatchOptimized, patternMatchOptimized2)
 import Data.Text (Text)
 import Criterion
 import Criterion.Main (defaultMain)
