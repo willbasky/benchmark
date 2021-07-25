@@ -1,8 +1,7 @@
--- {-# LANGUAGE BlockArguments #-}
 
 module Main (main) where
 
-import Benchmark (patternMatch, patternMatchAtto, patternMatchOptimized, patternMatchOptimized2)
+import Benchmarks (patternMatch, patternMatchOptimized, patternMatchAtto)
 import Data.Text (Text)
 import Hedgehog (Gen, PropertyT, forAll, (===))
 import Hedgehog.Gen (alphaNum, choice, frequency, sample, text, element)

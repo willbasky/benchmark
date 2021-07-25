@@ -1,6 +1,6 @@
 
 
-module Benchmark
+module Benchmarks
     ( patternMatch
     , patternMatchOptimized
     , patternMatchOptimized2

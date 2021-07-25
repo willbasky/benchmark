@@ -1,14 +1,14 @@
 cabal-version:       2.4
-name:                benchmark
+name:                benchmarks
 version:             0.0.0.0
 synopsis:            See README for more info
 description:
     See README for more info.
-    See [README.md](https://github.com/metaxis/benchmark#benchmark) for more details.
-homepage:            https://github.com/metaxis/benchmark
-bug-reports:         https://github.com/metaxis/benchmark/issues
-license:             Unlicense
-license-file:        UNLICENSE
+    See [README.md](https://github.com/metaxis/benchmarks#benchmarks) for more details.
+homepage:            https://github.com/metaxis/benchmarks
+bug-reports:         https://github.com/metaxis/benchmarks/issues
+license:             Apache-2.0
+license-file:        LICENSE
 author:              metaxis
 maintainer:          metaxis <email>
 copyright:           2021 metaxis
@@ -19,7 +19,7 @@ tested-with:         GHC == 8.10.3
 
 source-repository head
   type:                git
-  location:            https://github.com/metaxis/benchmark.git
+  location:            https://github.com/metaxis/benchmarks.git
 
 common common-options
   build-depends:       base ^>= 4.14.1.0
@@ -62,12 +62,12 @@ common common-options
 library
   import:              common-options
   hs-source-dirs:      src
-  exposed-modules:     Benchmark
+  exposed-modules:     Benchmarks
   build-depends:       text
                      , containers
                      , attoparsec
 
-test-suite benchmark-test
+test-suite benchmarks-test
   import:              common-options
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
@@ -75,19 +75,19 @@ test-suite benchmark-test
                        -rtsopts
                        -with-rtsopts=-N
   main-is:             Spec.hs
-  build-depends:       benchmark
+  build-depends:       benchmarks
                      , hspec
                      , hedgehog
                      , hspec-hedgehog
                      , text
 
 
-benchmark benchmark-benchmark
+benchmark benchmarks-benchmark
   import:              common-options
   type:                exitcode-stdio-1.0
   hs-source-dirs:      benchmark
   main-is:             Main.hs
-  build-depends:       benchmark
+  build-depends:       benchmarks
                      , text
                      , criterion
 
