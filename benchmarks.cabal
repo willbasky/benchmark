@@ -70,6 +70,8 @@ library
                      , generic-arbitrary
                      , QuickCheck
                      , text-icu
+                     , regex-base
+                     , regex-posix
 
 test-suite validate_input_test
   import:              common-options

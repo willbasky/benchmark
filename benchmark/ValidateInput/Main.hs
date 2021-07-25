@@ -4,7 +4,7 @@ import Criterion
 import Criterion.Main (defaultMain)
 import Data.Text (Text)
 import ValidateInput (validateInput, validateInputAtto,
-                      validateInputOptimized2, validateInputRegex)
+                      validateInputOptimized2, validateInputRegexPcre)
 
 main :: IO ()
 main = validateInputBenchmark
@@ -15,19 +15,19 @@ validateInputBenchmark = do
       [ bench "Elem text 10" $ nf validateInput text10
       , bench "Optimized2 10" $ nf validateInputOptimized2 text10
       , bench "Attoparsec 10" $ nf validateInputAtto text10
-      , bench "Regex imerative 10" $ nf validateInputRegex text10
+      , bench "Regex imerative 10" $ nf validateInputRegexPcre text10
       , bench "Elem text 50" $ nf validateInput text50
       , bench "Optimized2 50" $ nf validateInputOptimized2 text50
       , bench "Attoparsec 50" $ nf validateInputAtto text50
-      , bench "Regex imerative 50" $ nf validateInputRegex text50
+      , bench "Regex imerative 50" $ nf validateInputRegexPcre text50
       , bench "Elem text 100" $ nf validateInput text100
       , bench "Optimized2 100" $ nf validateInputOptimized2 text100
       , bench "Attoparsec 100" $ nf validateInputAtto text100
-      , bench "Regex imerative 100" $ nf validateInputRegex text100
+      , bench "Regex imerative 100" $ nf validateInputRegexPcre text100
       , bench "Elem text 200" $ nf validateInput text200
       , bench "Optimized2 200" $ nf validateInputOptimized2 text200
       , bench "Attoparsec 200" $ nf validateInputAtto text200
-      , bench "Regex imerative 200" $ nf validateInputRegex text200
+      , bench "Regex imerative 200" $ nf validateInputRegexPcre text200
       ]
 
 text10 :: Text

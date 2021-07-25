@@ -5,7 +5,8 @@ module ValidateInput
     -- , validateInputOptimized
     , validateInputOptimized2
     , validateInputAtto
-    , validateInputRegex
+    , validateInputRegexPcre
+    , validateInputRegexPosix
     ) where
 
 import Control.Applicative
@@ -15,7 +16,10 @@ import Data.Maybe (isJust)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as T
-import Data.Text.ICU
+import qualified Data.Text.ICU as Pcre
+import qualified Text.Regex.Base as Posix
+import qualified Text.Regex.Posix as Posix
+import Data.Bits ((.|.))
 
 
 -- Text approach
@@ -35,12 +39,12 @@ validCahrs = (['a'..'z'] ++ ['A'..'Z'] ++ ['0','1','2','3','4','5','6','7','8','
 
 -- Text optimized approach
 -- it consumes unicode chars, hence it is wrong
-validateInputOptimized :: Text -> Bool
-validateInputOptimized txt =
-  C.isAlphaNum (T.unpack txt !! 0) && (alphaNumSpecial txt)
+-- validateInputOptimized :: Text -> Bool
+-- validateInputOptimized txt =
+--   C.isAlphaNum (T.unpack txt !! 0) && (alphaNumSpecial txt)
 
-alphaNumSpecial :: Text -> Bool
-alphaNumSpecial txt = all (\c -> isSpecial c || C.isAlphaNum c)  (Set.fromList $ T.unpack txt)
+-- alphaNumSpecial :: Text -> Bool
+-- alphaNumSpecial txt = all (\c -> isSpecial c || C.isAlphaNum c)  (Set.fromList $ T.unpack txt)
 
 isSpecial :: Char -> Bool
 isSpecial a = a == '-' || a == '_'
@@ -81,14 +85,28 @@ alphaNum = satisfy $ inClass "a-zA-Z0-9"
 special :: Parser Char
 special = satisfy $ inClass "-_"
 
--- Regex. Imperative approach
+-- Regex. Imperative approach or PCRE
 
 -- ^[a-z0-9]+[a-z0-9_-]+$
 -- /^[a-z0-9_-]+$/i
 
+regexForInputPcre :: Pcre.Regex
+regexForInputPcre = Pcre.regex [Pcre.CaseInsensitive] "^[a-z0-9]+[a-z0-9_-]+$"
 
-regexForInput :: Regex
-regexForInput = regex [CaseInsensitive] "^[a-z0-9]+[a-z0-9_-]+$"
+validateInputRegexPcre :: Text -> Bool
+validateInputRegexPcre input = isJust $ Pcre.find regexForInputPcre input
 
-validateInputRegex :: Text -> Bool
-validateInputRegex input = isJust $ find regexForInput input
+
+-- Regex. Declarative approach or Posix.
+-- I use regex-base. It adoptes Posix for PCRE regex.
+
+-- matchTest :: regex -> source -> Bool
+regexForInputPosix :: Posix.Regex
+regexForInputPosix =
+  Posix.makeRegexOpts
+    (Posix.compIgnoreCase .|. Posix.compExtended)
+    Posix.defaultExecOpt
+    ("^[a-z0-9]+[a-z0-9_-]+$" :: String)
+
+validateInputRegexPosix :: String -> Bool
+validateInputRegexPosix = Posix.matchTest regexForInputPosix
