@@ -1,4 +1,4 @@
-
+{-# LANGUAGE QuasiQuotes #-}
 
 module ValidateInput
     ( validateInput
@@ -7,19 +7,21 @@ module ValidateInput
     , validateInputAtto
     , validateInputRegexPcre
     , validateInputRegexPosix
+    , validateInputRegexTDFA
     ) where
 
 import Control.Applicative
 import Data.Attoparsec.Text
+import Data.Bits ((.|.))
 import qualified Data.Char as C
 import Data.Maybe (isJust)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.ICU as Pcre
+import Text.RE.TDFA.Text
 import qualified Text.Regex.Base as Posix
 import qualified Text.Regex.Posix as Posix
-import Data.Bits ((.|.))
 
 
 -- Text approach
@@ -110,3 +112,9 @@ regexForInputPosix =
 
 validateInputRegexPosix :: String -> Bool
 validateInputRegexPosix = Posix.matchTest regexForInputPosix
+
+
+-- Regex TDFA library.
+
+validateInputRegexTDFA :: Text -> Bool
+validateInputRegexTDFA isin = matched $ isin ?=~ [reBlockInsensitive|^[a-z0-9][a-z0-9_-]+$|]

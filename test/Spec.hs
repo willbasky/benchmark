@@ -8,7 +8,10 @@ import qualified Hedgehog.Gen as G
 import Hedgehog.Range (constant)
 import Test.Hspec (Spec, describe, hspec, it, shouldBe)
 import Test.Hspec.Hedgehog (hedgehog)
-import ValidateInput (validateInput, validateInputAtto, validateInputOptimized2, validateInputRegexPcre, validateInputRegexPosix)
+
+import ValidateInput (validateInput, validateInputAtto, validateInputOptimized2,
+                      validateInputRegexPcre, validateInputRegexPosix, validateInputRegexTDFA)
+
 
 
 main :: IO ()
@@ -19,6 +22,7 @@ main = hspec $ do
   validateInputAttoSpec
   validateInputRegexPcreSpec
   validateInputRegexPosixSpec
+  validateInputRegexTDFASpec
 
 validateInputElemSpec :: Spec
 validateInputElemSpec =
@@ -204,6 +208,44 @@ validateInputRegexPosixSpec =
     it "Success with Test 31" $ validateInputRegexPosix "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
     it "Success with Test 32" $ validateInputRegexPosix "awerЫаырмuy" `shouldBe` False
     it "Success with Test 33" $ validateInputRegexPosix "aweruy_Ελληνική" `shouldBe` False
+
+validateInputRegexTDFASpec :: Spec
+validateInputRegexTDFASpec =
+  describe "Regex posix" $ do
+    it "Success with Test 1" $ validateInputRegexTDFA "9002876543___1234" `shouldBe` True
+    it "Success with Test 2" $ validateInputRegexTDFA "AAb9002876-543___1234" `shouldBe` True
+    it "Success with Test 3" $ validateInputRegexTDFA "@-AAb9002876-543___1234" `shouldBe` False
+    it "Success with Test 4" $ validateInputRegexTDFA "---AAb9002+876-543___1234" `shouldBe` False
+    it "Success with Test 5" $ validateInputRegexTDFA "AAb9002+876-543___1234" `shouldBe` False
+    it "Success with Test 6" $ validateInputRegexTDFA "AAb900-OPadff2876-543___1234" `shouldBe` True
+    it "Success with Test 7" $ validateInputRegexTDFA "AAb900-OPadff2876-543___1234-----_______" `shouldBe` True
+    it "Success with Test 8" $ validateInputRegexTDFA "AAb900-OPadff2876-543___1234-----_______*" `shouldBe` False
+    it "Success with Test 9" $ validateInputRegexTDFA "900-O_Pad-_ff2-876-543___1234-----______JAULOqw" `shouldBe` True
+    it "Success with Test 10" $ validateInputRegexTDFA "AAb-90111&80-O_Pad-_ff2-876-543___1234-----______JAUL;/\\'Oqw" `shouldBe` False
+    it "Success with Test 11" $ validateInputRegexTDFA "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'Oqw" `shouldBe` False
+    it "Success with Test 12" $ validateInputRegexTDFA "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'\\Oqw" `shouldBe` False
+    it "Success with Test 13" $ validateInputRegexTDFA "AASDFGHJERTYUCFGHJTYU" `shouldBe` True
+    it "Success with Test 14" $ validateInputRegexTDFA "12345678098765434567" `shouldBe` True
+    it "Success with Test 15" $ validateInputRegexTDFA "awertyuijhgfdertyuioiuy" `shouldBe` True
+    it "Success with Test 16" $ validateInputRegexTDFA "---------------------------------------" `shouldBe` False
+    it "Success with Test 17" $ validateInputRegexTDFA "MOJOTestUPIPJ13'''(select*from(select(sleep(20)))a)'''MOJOTestUPIPJ13}}yl7z7'''/<juaa1;console.log(299792458}}]],(299792458);" `shouldBe` False
+    it "Success with Test 18" $ validateInputRegexTDFA "++**&@#E#(#*&@#&*(*&@&*!" `shouldBe` False
+    it "Success with Test 19" $ validateInputRegexTDFA "1F ÝÞ1Fáãæç§© ¬         F1F1F1F1F1F1        " `shouldBe` False
+    it "Success with Test 20" $ validateInputRegexTDFA "11    AADYEJI       aasd        dfgh" `shouldBe` False
+    it "Success with Test 21" $ validateInputRegexTDFA "11\t\t\t\t\t\t\t" `shouldBe` False
+    it "Success with Test 22" $ validateInputRegexTDFA "asdfghΛλCyrillicЛ." `shouldBe` False
+    it "Success with Test 23" $ validateInputRegexTDFA "asdλfgh" `shouldBe` False
+    it "Success with Test 24" $ validateInputRegexTDFA "asd.fgh" `shouldBe` False
+    it "Success with Test 25" $ validateInputRegexTDFA "1asdAZ00010100101-_123fgh1" `shouldBe` True
+    it "Success with Test 26" $ validateInputRegexTDFA "1asdAZ0001α0100101-_123fgh1" `shouldBe` False
+    it "Success with Test 27" $ validateInputRegexTDFA "1asdAZβ" `shouldBe` False
+    it "Success with Test 28" $ validateInputRegexTDFA "1asdAZγ" `shouldBe` False
+    it "Success with Test 29" $ validateInputRegexTDFA "1asδϵζdAZ" `shouldBe` False
+    it "Success with Test 30" $ validateInputRegexTDFA "1asμνdAZ" `shouldBe` False
+    it "Success with Test 31" $ validateInputRegexTDFA "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
+    it "Success with Test 32" $ validateInputRegexTDFA "awerЫаырмuy" `shouldBe` False
+    it "Success with Test 33" $ validateInputRegexTDFA "aweruy_Ελληνική" `shouldBe` False
+
 
 compareThem :: Spec
 compareThem = do
