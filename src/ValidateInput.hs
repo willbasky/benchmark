@@ -54,10 +54,11 @@ isSpecial a = a == '-' || a == '_'
 -- Text optimized approach 2
 
 validateInputOptimized2 :: Text -> Bool
-validateInputOptimized2 orderId = isAlphaNumOpt2 (T.unpack orderId !! 0) && (alphaNumSpecial2 orderId)
+validateInputOptimized2 txt = isAlphaNumOpt2 (T.unpack txt !! 0) && (alphaNumSpecial2 txt)
 
 alphaNumSpecial2 :: Text -> Bool
-alphaNumSpecial2 orderId = all (\c -> isSpecial c || isAlphaNumOpt2 c) (Set.fromList $ T.unpack orderId)
+alphaNumSpecial2 txt =
+  all (\c -> isSpecial c || isAlphaNumOpt2 c) (Set.fromList $ T.unpack txt)
 
 isAlphaNumOpt2 :: Char -> Bool
 isAlphaNumOpt2 a = (C.ord a >= 97 && C.ord a <=122) || (C.ord a >= 65 && C.ord a <= 90) || C.isDigit a

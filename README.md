@@ -24,4 +24,15 @@ Compare generic `show` against approach using `unpack`.
 
 [visual results](benchmark/Output/unpack_overhead_visual.md)
 
+## FromList to Set
+
+Compare overheads of using `fromList` which nub duplicates.
+And traversinf with predicate.
+
+`fromList` decrease performance to 14-30 times.
+
+[text results](benchmark/Output/from_list.md)
+
+[visual results](benchmark/Output/from_list.md)
+
 
