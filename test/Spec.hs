@@ -10,19 +10,21 @@ import Test.Hspec (Spec, describe, hspec, it, shouldBe)
 import Test.Hspec.Hedgehog (hedgehog)
 
 import ValidateInput (validateInput, validateInputAtto, validateInputOptimized2,
-                      validateInputRegexPcre, validateInputRegexPosix, validateInputRegexTDFA)
+                      validateInputRegexPcre, validateInputRegexPosix,
+                      validateInputRegexTDFA)
 
 
 
 main :: IO ()
 main = hspec $ do
-  compareThem
-  validateInputElemSpec
-  validateInputOptimized2Spec
-  validateInputAttoSpec
+  -- compareThem
+  -- validateInputElemSpec
+  -- validateInputOptimized2Spec
+  -- validateInputAttoSpec
+  -- validateInputRegexTextIcuSpec -- icu lib issues unsolved
+  -- validateInputRegexPosixSpec
+  -- validateInputRegexTDFASpec
   validateInputRegexPcreSpec
-  validateInputRegexPosixSpec
-  validateInputRegexTDFASpec
 
 validateInputElemSpec :: Spec
 validateInputElemSpec =
@@ -135,42 +137,42 @@ validateInputAttoSpec =
     it "Success with Test 32" $ validateInputAtto "awerЫаырмuy" `shouldBe` False
     it "Success with Test 33" $ validateInputAtto "aweruy_Ελληνική" `shouldBe` False
 
-validateInputRegexPcreSpec :: Spec
-validateInputRegexPcreSpec =
-  describe "Regex pcre" $ do
-    it "Success with Test 1" $ validateInputRegexPcre "9002876543___1234" `shouldBe` True
-    it "Success with Test 2" $ validateInputRegexPcre "AAb9002876-543___1234" `shouldBe` True
-    it "Success with Test 3" $ validateInputRegexPcre "@-AAb9002876-543___1234" `shouldBe` False
-    it "Success with Test 4" $ validateInputRegexPcre "---AAb9002+876-543___1234" `shouldBe` False
-    it "Success with Test 5" $ validateInputRegexPcre "AAb9002+876-543___1234" `shouldBe` False
-    it "Success with Test 6" $ validateInputRegexPcre "AAb900-OPadff2876-543___1234" `shouldBe` True
-    it "Success with Test 7" $ validateInputRegexPcre "AAb900-OPadff2876-543___1234-----_______" `shouldBe` True
-    it "Success with Test 8" $ validateInputRegexPcre "AAb900-OPadff2876-543___1234-----_______*" `shouldBe` False
-    it "Success with Test 9" $ validateInputRegexPcre "900-O_Pad-_ff2-876-543___1234-----______JAULOqw" `shouldBe` True
-    it "Success with Test 10" $ validateInputRegexPcre "AAb-90111&80-O_Pad-_ff2-876-543___1234-----______JAUL;/\\'Oqw" `shouldBe` False
-    it "Success with Test 11" $ validateInputRegexPcre "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'Oqw" `shouldBe` False
-    it "Success with Test 12" $ validateInputRegexPcre "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'\\Oqw" `shouldBe` False
-    it "Success with Test 13" $ validateInputRegexPcre "AASDFGHJERTYUCFGHJTYU" `shouldBe` True
-    it "Success with Test 14" $ validateInputRegexPcre "12345678098765434567" `shouldBe` True
-    it "Success with Test 15" $ validateInputRegexPcre "awertyuijhgfdertyuioiuy" `shouldBe` True
-    it "Success with Test 16" $ validateInputRegexPcre "---------------------------------------" `shouldBe` False
-    it "Success with Test 17" $ validateInputRegexPcre "MOJOTestUPIPJ13'''(select*from(select(sleep(20)))a)'''MOJOTestUPIPJ13}}yl7z7'''/<juaa1;console.log(299792458}}]],(299792458);" `shouldBe` False
-    it "Success with Test 18" $ validateInputRegexPcre "++**&@#E#(#*&@#&*(*&@&*!" `shouldBe` False
-    it "Success with Test 19" $ validateInputRegexPcre "1F ÝÞ1Fáãæç§© ¬         F1F1F1F1F1F1        " `shouldBe` False
-    it "Success with Test 20" $ validateInputRegexPcre "11    AADYEJI       aasd        dfgh" `shouldBe` False
-    it "Success with Test 21" $ validateInputRegexPcre "11\t\t\t\t\t\t\t" `shouldBe` False
-    it "Success with Test 22" $ validateInputRegexPcre "asdfghΛλCyrillicЛ." `shouldBe` False
-    it "Success with Test 23" $ validateInputRegexPcre "asdλfgh" `shouldBe` False
-    it "Success with Test 24" $ validateInputRegexPcre "asd.fgh" `shouldBe` False
-    it "Success with Test 25" $ validateInputRegexPcre "1asdAZ00010100101-_123fgh1" `shouldBe` True
-    it "Success with Test 26" $ validateInputRegexPcre "1asdAZ0001α0100101-_123fgh1" `shouldBe` False
-    it "Success with Test 27" $ validateInputRegexPcre "1asdAZβ" `shouldBe` False
-    it "Success with Test 28" $ validateInputRegexPcre "1asdAZγ" `shouldBe` False
-    it "Success with Test 29" $ validateInputRegexPcre "1asδϵζdAZ" `shouldBe` False
-    it "Success with Test 30" $ validateInputRegexPcre "1asμνdAZ" `shouldBe` False
-    it "Success with Test 31" $ validateInputRegexPcre "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
-    it "Success with Test 32" $ validateInputRegexPcre "awerЫаырмuy" `shouldBe` False
-    it "Success with Test 33" $ validateInputRegexPcre "aweruy_Ελληνική" `shouldBe` False
+-- validateInputRegexTextIcuSpec :: Spec
+-- validateInputRegexTextIcuSpec =
+--   describe "Regex pcre" $ do
+--     it "Success with Test 1" $ validateInputRegexTextIcu "9002876543___1234" `shouldBe` True
+--     it "Success with Test 2" $ validateInputRegexTextIcu "AAb9002876-543___1234" `shouldBe` True
+--     it "Success with Test 3" $ validateInputRegexTextIcu "@-AAb9002876-543___1234" `shouldBe` False
+--     it "Success with Test 4" $ validateInputRegexTextIcu "---AAb9002+876-543___1234" `shouldBe` False
+--     it "Success with Test 5" $ validateInputRegexTextIcu "AAb9002+876-543___1234" `shouldBe` False
+--     it "Success with Test 6" $ validateInputRegexTextIcu "AAb900-OPadff2876-543___1234" `shouldBe` True
+--     it "Success with Test 7" $ validateInputRegexTextIcu "AAb900-OPadff2876-543___1234-----_______" `shouldBe` True
+--     it "Success with Test 8" $ validateInputRegexTextIcu "AAb900-OPadff2876-543___1234-----_______*" `shouldBe` False
+--     it "Success with Test 9" $ validateInputRegexTextIcu "900-O_Pad-_ff2-876-543___1234-----______JAULOqw" `shouldBe` True
+--     it "Success with Test 10" $ validateInputRegexTextIcu "AAb-90111&80-O_Pad-_ff2-876-543___1234-----______JAUL;/\\'Oqw" `shouldBe` False
+--     it "Success with Test 11" $ validateInputRegexTextIcu "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'Oqw" `shouldBe` False
+--     it "Success with Test 12" $ validateInputRegexTextIcu "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'\\Oqw" `shouldBe` False
+--     it "Success with Test 13" $ validateInputRegexTextIcu "AASDFGHJERTYUCFGHJTYU" `shouldBe` True
+--     it "Success with Test 14" $ validateInputRegexTextIcu "12345678098765434567" `shouldBe` True
+--     it "Success with Test 15" $ validateInputRegexTextIcu "awertyuijhgfdertyuioiuy" `shouldBe` True
+--     it "Success with Test 16" $ validateInputRegexTextIcu "---------------------------------------" `shouldBe` False
+--     it "Success with Test 17" $ validateInputRegexTextIcu "MOJOTestUPIPJ13'''(select*from(select(sleep(20)))a)'''MOJOTestUPIPJ13}}yl7z7'''/<juaa1;console.log(299792458}}]],(299792458);" `shouldBe` False
+--     it "Success with Test 18" $ validateInputRegexTextIcu "++**&@#E#(#*&@#&*(*&@&*!" `shouldBe` False
+--     it "Success with Test 19" $ validateInputRegexTextIcu "1F ÝÞ1Fáãæç§© ¬         F1F1F1F1F1F1        " `shouldBe` False
+--     it "Success with Test 20" $ validateInputRegexTextIcu "11    AADYEJI       aasd        dfgh" `shouldBe` False
+--     it "Success with Test 21" $ validateInputRegexTextIcu "11\t\t\t\t\t\t\t" `shouldBe` False
+--     it "Success with Test 22" $ validateInputRegexTextIcu "asdfghΛλCyrillicЛ." `shouldBe` False
+--     it "Success with Test 23" $ validateInputRegexTextIcu "asdλfgh" `shouldBe` False
+--     it "Success with Test 24" $ validateInputRegexTextIcu "asd.fgh" `shouldBe` False
+--     it "Success with Test 25" $ validateInputRegexTextIcu "1asdAZ00010100101-_123fgh1" `shouldBe` True
+--     it "Success with Test 26" $ validateInputRegexTextIcu "1asdAZ0001α0100101-_123fgh1" `shouldBe` False
+--     it "Success with Test 27" $ validateInputRegexTextIcu "1asdAZβ" `shouldBe` False
+--     it "Success with Test 28" $ validateInputRegexTextIcu "1asdAZγ" `shouldBe` False
+--     it "Success with Test 29" $ validateInputRegexTextIcu "1asδϵζdAZ" `shouldBe` False
+--     it "Success with Test 30" $ validateInputRegexTextIcu "1asμνdAZ" `shouldBe` False
+--     it "Success with Test 31" $ validateInputRegexTextIcu "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
+--     it "Success with Test 32" $ validateInputRegexTextIcu "awerЫаырмuy" `shouldBe` False
+--     it "Success with Test 33" $ validateInputRegexTextIcu "aweruy_Ελληνική" `shouldBe` False
 
 validateInputRegexPosixSpec :: Spec
 validateInputRegexPosixSpec =
@@ -245,6 +247,43 @@ validateInputRegexTDFASpec =
     it "Success with Test 31" $ validateInputRegexTDFA "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
     it "Success with Test 32" $ validateInputRegexTDFA "awerЫаырмuy" `shouldBe` False
     it "Success with Test 33" $ validateInputRegexTDFA "aweruy_Ελληνική" `shouldBe` False
+
+validateInputRegexPcreSpec :: Spec
+validateInputRegexPcreSpec =
+  describe "Regex posix" $ do
+    it "Success with Test 1" $ validateInputRegexPcre "9002876543___1234" `shouldBe` True
+    it "Success with Test 2" $ validateInputRegexPcre "AAb9002876-543___1234" `shouldBe` True
+    it "Success with Test 3" $ validateInputRegexPcre "@-AAb9002876-543___1234" `shouldBe` False
+    it "Success with Test 4" $ validateInputRegexPcre "---AAb9002+876-543___1234" `shouldBe` False
+    it "Success with Test 5" $ validateInputRegexPcre "AAb9002+876-543___1234" `shouldBe` False
+    it "Success with Test 6" $ validateInputRegexPcre "AAb900-OPadff2876-543___1234" `shouldBe` True
+    it "Success with Test 7" $ validateInputRegexPcre "AAb900-OPadff2876-543___1234-----_______" `shouldBe` True
+    it "Success with Test 8" $ validateInputRegexPcre "AAb900-OPadff2876-543___1234-----_______*" `shouldBe` False
+    it "Success with Test 9" $ validateInputRegexPcre "900-O_Pad-_ff2-876-543___1234-----______JAULOqw" `shouldBe` True
+    it "Success with Test 10" $ validateInputRegexPcre "AAb-90111&80-O_Pad-_ff2-876-543___1234-----______JAUL;/\\'Oqw" `shouldBe` False
+    it "Success with Test 11" $ validateInputRegexPcre "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'Oqw" `shouldBe` False
+    it "Success with Test 12" $ validateInputRegexPcre "A80-O_Pad-_ff2-876-543___1234-----______JAUL\\'\\Oqw" `shouldBe` False
+    it "Success with Test 13" $ validateInputRegexPcre "AASDFGHJERTYUCFGHJTYU" `shouldBe` True
+    it "Success with Test 14" $ validateInputRegexPcre "12345678098765434567" `shouldBe` True
+    it "Success with Test 15" $ validateInputRegexPcre "awertyuijhgfdertyuioiuy" `shouldBe` True
+    it "Success with Test 16" $ validateInputRegexPcre "---------------------------------------" `shouldBe` False
+    it "Success with Test 17" $ validateInputRegexPcre "MOJOTestUPIPJ13'''(select*from(select(sleep(20)))a)'''MOJOTestUPIPJ13}}yl7z7'''/<juaa1;console.log(299792458}}]],(299792458);" `shouldBe` False
+    it "Success with Test 18" $ validateInputRegexPcre "++**&@#E#(#*&@#&*(*&@&*!" `shouldBe` False
+    it "Success with Test 19" $ validateInputRegexPcre "1F ÝÞ1Fáãæç§© ¬         F1F1F1F1F1F1        " `shouldBe` False
+    it "Success with Test 20" $ validateInputRegexPcre "11    AADYEJI       aasd        dfgh" `shouldBe` False
+    it "Success with Test 21" $ validateInputRegexPcre "11\t\t\t\t\t\t\t" `shouldBe` False
+    it "Success with Test 22" $ validateInputRegexPcre "asdfghΛλCyrillicЛ." `shouldBe` False
+    it "Success with Test 23" $ validateInputRegexPcre "asdλfgh" `shouldBe` False
+    it "Success with Test 24" $ validateInputRegexPcre "asd.fgh" `shouldBe` False
+    it "Success with Test 25" $ validateInputRegexPcre "1asdAZ00010100101-_123fgh1" `shouldBe` True
+    it "Success with Test 26" $ validateInputRegexPcre "1asdAZ0001α0100101-_123fgh1" `shouldBe` False
+    it "Success with Test 27" $ validateInputRegexPcre "1asdAZβ" `shouldBe` False
+    it "Success with Test 28" $ validateInputRegexPcre "1asdAZγ" `shouldBe` False
+    it "Success with Test 29" $ validateInputRegexPcre "1asδϵζdAZ" `shouldBe` False
+    it "Success with Test 30" $ validateInputRegexPcre "1asμνdAZ" `shouldBe` False
+    it "Success with Test 31" $ validateInputRegexPcre "ΑΒΓΔΕΘΙΛΞ" `shouldBe` False
+    it "Success with Test 32" $ validateInputRegexPcre "awerЫаырмuy" `shouldBe` False
+    it "Success with Test 33" $ validateInputRegexPcre "aweruy_Ελληνική" `shouldBe` False
 
 
 compareThem :: Spec

@@ -5,11 +5,13 @@ module ValidateInput
     -- , validateInputOptimized
     , validateInputOptimized2
     , validateInputAtto
-    , validateInputRegexPcre
+    -- , validateInputRegexTextIcu
     , validateInputRegexPosix
     , validateInputRegexTDFA
+    , validateInputRegexPcre
     ) where
 
+-- import qualified Data.Text.ICU as Icu
 import Control.Applicative
 import Data.Attoparsec.Text
 import Data.Bits ((.|.))
@@ -18,13 +20,15 @@ import Data.Maybe (isJust)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as T
-import qualified Data.Text.ICU as Pcre
-import Text.RE.TDFA.Text
-import qualified Text.Regex.Base as Posix
+import qualified Text.RE.TDFA.Text as Re
+import qualified Text.Regex.Base as Base
+import Text.Regex.PCRE ((=~))
+import qualified Text.Regex.PCRE.String as Pcre
 import qualified Text.Regex.Posix as Posix
 
-
+-------------------------------------------------------------------------------
 -- Text approach
+-------------------------------------------------------------------------------
 validateInput :: Text -> Bool
 validateInput txt =
   ((T.unpack txt !! 0) `elem` validCahrs) && not (containSpecialChars txt)
@@ -39,8 +43,10 @@ validCahrs :: String
 validCahrs = (['a'..'z'] ++ ['A'..'Z'] ++ ['0','1','2','3','4','5','6','7','8','9'])
 
 
+-------------------------------------------------------------------------------
 -- Text optimized approach
 -- it consumes unicode chars, hence it is wrong
+-------------------------------------------------------------------------------
 -- validateInputOptimized :: Text -> Bool
 -- validateInputOptimized txt =
 --   C.isAlphaNum (T.unpack txt !! 0) && (alphaNumSpecial txt)
@@ -51,7 +57,9 @@ validCahrs = (['a'..'z'] ++ ['A'..'Z'] ++ ['0','1','2','3','4','5','6','7','8','
 isSpecial :: Char -> Bool
 isSpecial a = a == '-' || a == '_'
 
+-------------------------------------------------------------------------------
 -- Text optimized approach 2
+-------------------------------------------------------------------------------
 
 validateInputOptimized2 :: Text -> Bool
 validateInputOptimized2 txt = isAlphaNumOpt2 (T.unpack txt !! 0) && (alphaNumSpecial2 txt)
@@ -63,7 +71,9 @@ alphaNumSpecial2 txt =
 isAlphaNumOpt2 :: Char -> Bool
 isAlphaNumOpt2 a = (C.ord a >= 97 && C.ord a <=122) || (C.ord a >= 65 && C.ord a <= 90) || C.isDigit a
 
+-------------------------------------------------------------------------------
 -- Attoparsec approach
+-------------------------------------------------------------------------------
 
 runParser :: Parser a -> Text -> Either String a
 runParser p t = parseOnly (p <* endOfInput) t
@@ -88,20 +98,24 @@ alphaNum = satisfy $ inClass "a-zA-Z0-9"
 special :: Parser Char
 special = satisfy $ inClass "-_"
 
+-------------------------------------------------------------------------------
 -- Regex. Imperative approach or PCRE
+-- TODO: fix icu library issues
+-------------------------------------------------------------------------------
 
 -- ^[a-z0-9]+[a-z0-9_-]+$
 -- /^[a-z0-9_-]+$/i
 
-regexForInputPcre :: Pcre.Regex
-regexForInputPcre = Pcre.regex [Pcre.CaseInsensitive] "^[a-z0-9][a-z0-9_-]+$"
+-- regexForInputIcu :: Icu.Regex
+-- regexForInputIcu = Icu.regex [Icu.CaseInsensitive] "^[a-z0-9][a-z0-9_-]+$"
 
-validateInputRegexPcre :: Text -> Bool
-validateInputRegexPcre input = isJust $ Pcre.find regexForInputPcre input
+-- validateInputRegexTextIcu :: Text -> Bool
+-- validateInputRegexTextIcu input = isJust $ Icu.find regexForInputIcu input
 
-
+-------------------------------------------------------------------------------
 -- Regex. Declarative approach or Posix.
 -- I use regex-base. It adoptes Posix for PCRE regex.
+-------------------------------------------------------------------------------
 
 -- matchTest :: regex -> source -> Bool
 regexForInputPosix :: Posix.Regex
@@ -115,7 +129,24 @@ validateInputRegexPosix :: String -> Bool
 validateInputRegexPosix = Posix.matchTest regexForInputPosix
 
 
+-------------------------------------------------------------------------------
 -- Regex TDFA library.
+-------------------------------------------------------------------------------
 
 validateInputRegexTDFA :: Text -> Bool
-validateInputRegexTDFA isin = matched $ isin ?=~ [reBlockInsensitive|^[a-z0-9][a-z0-9_-]+$|]
+validateInputRegexTDFA isin = Re.matched $ isin Re.?=~ [Re.reBlockInsensitive|^[a-z0-9][a-z0-9_-]+$|]
+
+
+-------------------------------------------------------------------------------
+-- regex-pcre
+-------------------------------------------------------------------------------
+-- regexForInput :: Pcre.Regex
+-- regexForInput =
+--   Base.makeRegexOpts
+--     (Pcre.compCaseless .|. Pcre.compExtended)
+--     Base.defaultExecOpt
+--     ("^[a-z0-9][a-z0-9_-]+$" :: String)
+
+validateInputRegexPcre :: String -> Bool
+-- validateInputRegexPcre input = (=~) input regexForInput
+validateInputRegexPcre input = (=~) input ("^[a-zA-Z0-9][a-zA-Z0-9_-]+$" :: String)

@@ -7,8 +7,8 @@ description:
     See [README.md](https://github.com/metaxis/benchmarks#benchmarks) for more details.
 homepage:            https://github.com/metaxis/benchmarks
 bug-reports:         https://github.com/metaxis/benchmarks/issues
-license:             Apache-2.0
-license-file:        UNLICENSE
+license:             BSD-3-Clause
+license-file:        LICENSE
 author:              metaxis
 maintainer:          metaxis <email>
 copyright:           2021 metaxis
@@ -70,10 +70,11 @@ library
                      , attoparsec
                      , generic-arbitrary
                      , QuickCheck
-                     , text-icu
+                    --  , text-icu
                      , regex-base
                      , regex-posix
                      , regex
+                     , regex-pcre
 
 test-suite validate_input_test
   import:              common-options
