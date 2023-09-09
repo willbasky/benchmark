@@ -5,26 +5,32 @@ module ValidateInput
     -- , validateInputOptimized
     , validateInputOptimized2
     , validateInputAtto
-    -- , validateInputRegexTextIcu
-    , validateInputRegexPosix
-    , validateInputRegexTDFA
-    , validateInputRegexPcre
+
+    , regexPosix
+    , regex
+    , regexPcre
+    , regexTdfa
+    , regexLight
     ) where
 
--- import qualified Data.Text.ICU as Icu
 import Control.Applicative
 import Data.Attoparsec.Text
+import Data.ByteString (ByteString)
 import Data.Bits ((.|.))
 import qualified Data.Char as C
-import Data.Maybe (isJust)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as T
-import qualified Text.RE.TDFA.Text as Re
-import qualified Text.Regex.Base as Base
-import Text.Regex.PCRE ((=~))
-import qualified Text.Regex.PCRE.String as Pcre
+
+import qualified Text.RE.TDFA.ByteString as Re
+-- import qualified Text.Regex.Base as Base
 import qualified Text.Regex.Posix as Posix
+
+-- Best by performance
+-- See https://wiki.haskell.org/Regular_expressions
+import qualified Text.Regex.PCRE as Pcre
+import qualified Text.Regex.PCRE.Light as Light
+import qualified Text.Regex.TDFA as Tdfa
 
 -------------------------------------------------------------------------------
 -- Text approach
@@ -98,55 +104,54 @@ alphaNum = satisfy $ inClass "a-zA-Z0-9"
 special :: Parser Char
 special = satisfy $ inClass "-_"
 
--------------------------------------------------------------------------------
--- Regex. Imperative approach or PCRE
--- TODO: fix icu library issues
--------------------------------------------------------------------------------
-
--- ^[a-z0-9]+[a-z0-9_-]+$
--- /^[a-z0-9_-]+$/i
-
--- regexForInputIcu :: Icu.Regex
--- regexForInputIcu = Icu.regex [Icu.CaseInsensitive] "^[a-z0-9][a-z0-9_-]+$"
-
--- validateInputRegexTextIcu :: Text -> Bool
--- validateInputRegexTextIcu input = isJust $ Icu.find regexForInputIcu input
 
 -------------------------------------------------------------------------------
+-- Simple regex and string
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- regex library
+-------------------------------------------------------------------------------
+
+regex :: Re.RE -> ByteString -> Bool
+regex re isin = Re.matched $ isin Re.?=~ re
+
+-------------------------------------------------------------------------------
+-- regex-posix
 -- Regex. Declarative approach or Posix.
 -- I use regex-base. It adoptes Posix for PCRE regex.
 -------------------------------------------------------------------------------
 
--- matchTest :: regex -> source -> Bool
-regexForInputPosix :: Posix.Regex
-regexForInputPosix =
+regexForInputPosix :: ByteString -> Posix.Regex
+regexForInputPosix r =
   Posix.makeRegexOpts
     (Posix.compIgnoreCase .|. Posix.compExtended)
     Posix.defaultExecOpt
-    ("^[a-z0-9][a-z0-9_-]+$" :: String)
+    r
 
-validateInputRegexPosix :: String -> Bool
-validateInputRegexPosix = Posix.matchTest regexForInputPosix
-
-
--------------------------------------------------------------------------------
--- Regex TDFA library.
--------------------------------------------------------------------------------
-
-validateInputRegexTDFA :: Text -> Bool
-validateInputRegexTDFA isin = Re.matched $ isin Re.?=~ [Re.reBlockInsensitive|^[a-z0-9][a-z0-9_-]+$|]
-
+regexPosix :: ByteString -> ByteString -> Bool
+regexPosix r = Posix.matchTest (regexForInputPosix r)
 
 -------------------------------------------------------------------------------
 -- regex-pcre
 -------------------------------------------------------------------------------
--- regexForInput :: Pcre.Regex
--- regexForInput =
---   Base.makeRegexOpts
---     (Pcre.compCaseless .|. Pcre.compExtended)
---     Base.defaultExecOpt
---     ("^[a-z0-9][a-z0-9_-]+$" :: String)
 
-validateInputRegexPcre :: String -> Bool
--- validateInputRegexPcre input = (=~) input regexForInput
-validateInputRegexPcre input = (=~) input ("^[a-zA-Z0-9][a-zA-Z0-9_-]+$" :: String)
+regexPcre :: ByteString -> ByteString -> Bool
+regexPcre r input = input Pcre.=~ r
+
+-------------------------------------------------------------------------------
+-- regex-tdfa
+-------------------------------------------------------------------------------
+
+regexTdfa :: ByteString -> ByteString -> Bool
+regexTdfa r input = input Tdfa.=~ r
+
+-------------------------------------------------------------------------------
+-- pcre-light
+-------------------------------------------------------------------------------
+
+regexLight :: Light.Regex -> ByteString -> Bool
+regexLight re input =
+  case Light.match re input [] of
+    Nothing -> False
+    Just list -> not $ null list
